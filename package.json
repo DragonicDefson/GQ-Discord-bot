@@ -1,0 +1,23 @@
+{
+  "name": "discord-bot",
+  "version": "0.0.1",
+  "description": "Discord Bot",
+  "main": "app.js",
+  "repository": {
+    "type": "",
+    "url": ""
+  },
+  "scripts": {
+    "start": "node ."
+  },
+  "author": "Bradley Methorst",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "discord.js": "^14.3.0",
+    "dotenv": "^16.0.1",
+    "fs": "^0.0.1-security",
+    "gamedig": "^4.0.5",
+    "is-port-reachable": "^4.0.0",
+    "winston": "^3.8.2"
+  }
+}
