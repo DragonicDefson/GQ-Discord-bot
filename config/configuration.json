@@ -1,0 +1,146 @@
+{
+  "application": {
+    "name": "GQBot",
+    "author": "Bradley Methorst",
+    "version": "0.0.4",
+    "license": "GPL-v3.0",
+    "core-functionality": {
+      "network-name": "<your-network-name>",
+      "query-timeout": 5000,
+      "maintenance-timeout": 10000,
+      "offline-log-limit": 1
+    },
+    "sub-modules": {
+      "logging": {
+        "winston": {
+          "__comment": "If you disable this config option, it's suggested to turn on console logging.",
+          "enabled": true,
+          "log-path": "./logs/"
+        },
+        "console": {
+          "enabled": true
+        }
+      },
+      "api": {
+        "enabled": true,
+        "port": 8484
+      }
+    },
+    "server-definitions": {
+      "minecraft": {
+        "enabled": true,
+        "stats-prefix": "",
+        "stats-type": "watching",
+        "discord-key": "",
+        "type": "minecraft",
+        "port": 25565,
+        "PingCheckThreshold": 50,
+        "socketTimeout": 2000,
+        "attemptTimeout": 10000,
+        "maxAttempts": 1,
+        "givenPortOnly": true,
+        "debug": false,
+        "request-rules": false,
+        "host": "<domain-or-ip>",
+        "online": "♦ Players online: ",
+        "offline": "♦ servers are offline.",
+        "degraded": "♦ Network degraded: "
+      },
+      "valheim": {
+        "enabled": true,
+        "stats-prefix": "",
+        "stats-type": "watching",
+        "discord-key": "",
+        "type": "valheim",
+        "port": 2457,
+        "PingCheckThreshold": 50,
+        "socketTimeout": 2000,
+        "attemptTimeout": 10000,
+        "maxAttempts": 1,
+        "givenPortOnly": true,
+        "debug": false,
+        "request-rules": false,
+        "host": "<domain-or-ip>",
+        "online": "♦ Players online: ",
+        "offline": "♦ Server: offline",
+        "degraded": "♦ Network degraded: "
+      },
+      "ark-survival-evolved": {
+        "enabled": true,
+        "stats-prefix": "",
+        "stats-type": "watching",
+        "discord-key": "",
+        "type": "arkse",
+        "port": 27015,
+        "PingCheckThreshold": 50,
+        "socketTimeout": 2000,
+        "attemptTimeout": 10000,
+        "maxAttempts": 1,
+        "givenPortOnly": true,
+        "debug": false,
+        "request-rules": false,
+        "host": "<domain-or-ip>",
+        "online": "♦ Players online: ",
+        "offline": "♦ Server: offline",
+        "degraded": "♦ Network degraded: "
+      },
+      "space-engineers": {
+        "enabled": true,
+        "stats-prefix": "",
+        "stats-type": "watching",
+        "discord-key": "",
+        "type": "spaceengineers",
+        "port": 27016,
+        "PingCheckThreshold": 50,
+        "socketTimeout": 2000,
+        "attemptTimeout": 10000,
+        "maxAttempts": 1,
+        "givenPortOnly": true,
+        "debug": false,
+        "request-rules": false,
+        "host": "<domain-or-ip>",
+        "online": "♦ Players online: ",
+        "offline": "♦ Server: offline",
+        "degraded": "♦ Network degraded: "
+      },
+      "conan-exiles": {
+        "enabled": true,
+        "stats-prefix": "",
+        "discord-key": "",
+        "stats-type": "watching",
+        "type": "conanexiles",
+        "port": 27018,
+        "PingCheckThreshold": 50,
+        "socketTimeout": 2000,
+        "attemptTimeout": 10000,
+        "maxAttempts": 1,
+        "givenPortOnly": true,
+        "debug": false,
+        "request-rules": false,
+        "host": "<domain-or-ip>",
+        "online": "♦ Players online: ",
+        "offline": "♦ Server: offline",
+        "degraded": "♦ Network degraded: "
+      },
+      "seven-days-to-die": {
+        "enabled": true,
+        "stats-prefix": "",
+        "discord-key": "",
+        "stats-type": "watching",
+        "type": "7d2d",
+        "port": 27017,
+        "PingCheckThreshold": 50,
+        "socketTimeout": 2000,
+        "attemptTimeout": 10000,
+        "maxAttempts": 1,
+        "givenPortOnly": true,
+        "debug": false,
+        "request-rules": false,
+        "host": "<domain-or-ip>",
+        "online": "♦ Players online: ",
+        "offline": "♦ Server: offline",
+        "degraded": "♦ Network degraded: "
+      }
+    }
+  }
+}

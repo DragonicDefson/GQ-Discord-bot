@@ -1,5 +1,5 @@
 # GQ-Discord-bot
-A Discord bot for querying game servers
+An Discord bot for querying game servers
 
 # Supports
 - Minecraft
@@ -18,3 +18,6 @@ A Discord bot for querying game servers
 # Additional information
 - If you run an Ark Survival Evolved dedicated server on the same machine as a Conan Exiles server, make sure to change it's port in the Engine.ini file of the Conan Exiles server, and the port in the servers.json of the bot. To prevent inteference between the servers.
 - Enjoy :)
+
+# Update (as of 11/26/2022)
+- Includes an API for web interfaces now as well!
