@@ -43,7 +43,7 @@
         "request-rules": false,
         "host": "<domain-or-ip>",
         "online": "♦ Players online: ",
-        "offline": "♦ servers are offline.",
+        "offline": "♦ Servers: offline.",
         "degraded": "♦ Network degraded: "
       },
       "valheim": {
