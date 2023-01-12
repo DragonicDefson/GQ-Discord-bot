@@ -15,7 +15,7 @@ require('./api')(application)
 
 if (server_config !== undefined) {
   if (api_configuration['api']['enabled']) {
-    application.listen(api_configuration['api']['port'], () => {
+    application.listen(api_configuration['api']['port'], api_configuration['api']['host_interface'], () => {
       logger.log('info', `${application_name} API Submodule enabled.`)
     })
   }

@@ -7,8 +7,26 @@ const server_config = config.load('server-definitions')
 const game_name = 'conan-exiles'
 const application_name = config.load('name')
 const network_name = core_functionality['network-name']
-let client, discord_data, api_data, type, offline_log_limit = undefined
+const attempts = server_config[game_name]['maxAttempts']
+let max_attemps = undefined
 
+if (typeof attempts !== null) {
+  max_attemps = attempts
+} else { max_attemps = 0 }
+
+const game_settings = {
+  port: server_config[game_name]['port'],
+  socketTimeout: server_config[game_name]['socketTimeout'],
+  attemptTimeout: server_config[game_name]['attemptTimeout'],
+  maxAttempts: max_attemps,
+  givenPortOnly: server_config[game_name]['givenPortOnly'],
+  type: server_config[game_name]['type'],
+  host: server_config[game_name]['host'],
+  debug: server_config[game_name]['debug'],
+  requestRules: server_config[game_name]['request-rules']
+}
+
+let client, discord_data, api_data, type, offline_log_limit = undefined
 function login (auth_token) {
   offline_log_limit = core_functionality['offline-log-limit']
   if (server_config[game_name]['enabled']) {
@@ -31,17 +49,7 @@ function updateStats (timeout) {
 
 function queryData () {
   let query_timeout = core_functionality['query-timeout']
-  GameDig.query({
-    port: server_config[game_name]['port'],
-    socketTimeout: server_config[game_name]['socketTimeout'],
-    attemptTimeout: server_config[game_name]['attemptTimeout'],
-    maxAttempts: server_config[game_name]['maxAttempts'],
-    givenPortOnly: server_config[game_name]['givenPortOnly'],
-    type: server_config[game_name]['type'],
-    host: server_config[game_name]['host'],
-    debug: server_config[game_name]['debug'],
-    requestRules: server_config[game_name]['request-rules']
-  }).then((state) => {
+  GameDig.query(game_settings).then((state) => {
     if (state.ping > server_config[game_name]['PingCheckThreshold']) {
       type = 'ping'
       api_data = `${state.ping}`

@@ -1,7 +1,7 @@
 {
-  "name": "discord-bot",
-  "version": "0.0.1",
-  "description": "Discord Bot",
+  "name": "gq-discord-bot",
+  "version": "0.0.5",
+  "description": "Discord bot for querying game servers.",
   "main": "app.js",
   "repository": {
     "type": "",
@@ -10,7 +10,7 @@
   "scripts": {
     "start": "node ."
   },
-  "author": "Bradley Methorst",
+  "author": "Bradley Methorst <contact@bradleymethorst.com>",
   "license": "GPL-3.0",
   "dependencies": {
     "discord.js": "^14.3.0",
