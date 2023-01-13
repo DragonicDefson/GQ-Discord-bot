@@ -5,7 +5,7 @@
     "version": "0.0.4",
     "license": "GPL-v3.0",
     "core-functionality": {
-      "network-name": "<your-network-name>",
+      "network-name": "",
       "socketTimeout": 2000,
       "attemptTimeout": 10000,
       "offline-log-limit": 1
@@ -42,7 +42,7 @@
         "givenPortOnly": true,
         "debug": false,
         "request-rules": false,
-        "host": "<domain-or-ip>",
+        "host": "",
         "online": "♦ Players online: ",
         "offline": "♦ Servers: offline.",
         "degraded": "♦ Network degraded: "
@@ -61,7 +61,7 @@
         "givenPortOnly": true,
         "debug": false,
         "request-rules": false,
-        "host": "<domain-or-ip>",
+        "host": "",
         "online": "♦ Players online: ",
         "offline": "♦ Server: offline",
         "degraded": "♦ Network degraded: "
@@ -80,7 +80,7 @@
         "givenPortOnly": true,
         "debug": false,
         "request-rules": false,
-        "host": "<domain-or-ip>",
+        "host": "",
         "online": "♦ Players online: ",
         "offline": "♦ Server: offline",
         "degraded": "♦ Network degraded: "
@@ -99,7 +99,7 @@
         "givenPortOnly": true,
         "debug": false,
         "request-rules": false,
-        "host": "<domain-or-ip>",
+        "host": "",
         "online": "♦ Players online: ",
         "offline": "♦ Server: offline",
         "degraded": "♦ Network degraded: "
@@ -118,7 +118,7 @@
         "givenPortOnly": true,
         "debug": false,
         "request-rules": false,
-        "host": "<domain-or-ip>",
+        "host": "",
         "online": "♦ Players online: ",
         "offline": "♦ Server: offline",
         "degraded": "♦ Network degraded: "
@@ -137,7 +137,7 @@
         "givenPortOnly": true,
         "debug": false,
         "request-rules": false,
-        "host": "<domain-or-ip>",
+        "host": "",
         "online": "♦ Players online: ",
         "offline": "♦ Server: offline",
         "degraded": "♦ Network degraded: "

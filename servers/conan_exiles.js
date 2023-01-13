@@ -8,7 +8,8 @@ const game_name = 'conan-exiles'
 const application_name = config.load('name')
 const network_name = core_functionality['network-name']
 const attempts = server_config[game_name]['maxAttempts']
-let max_attemps = undefined
+const query_timeout = core_functionality['queryTimeout']
+let client, discord_data, api_data, type, offline_log_limit, max_attemps = undefined
 
 if (typeof attempts !== null) {
   max_attemps = attempts
@@ -26,40 +27,38 @@ const game_settings = {
   requestRules: server_config[game_name]['request-rules']
 }
 
-let client, discord_data, api_data, type, offline_log_limit = undefined
-function login (auth_token) {
+global.conan_exiles_login = function login (auth_token) {
   offline_log_limit = core_functionality['offline-log-limit']
   if (server_config[game_name]['enabled']) {
     client = new Client({intents: [IntentsBitField.Flags.Guilds]})
     client.login(auth_token)
-    client.on('ready', async () => {
+    client.on('ready', () => {
       logger.log('info', `${application_name} has succeeded Discord authorization process and is running.`)
-      asyncTimer(core_functionality['query_timeout'])
+      asyncTimer()
     })
   }
 }
 
-function updateStats (timeout) {
+function updateStats () {
   client.user.setActivity(Buffer.from(`${network_name} ${server_config[game_name]['stats-prefix']} ${discord_data}`, 'utf-8').toString(), [{
     status: 'online',
     type: server_config[game_name]['stats-type']
   }])
-  asyncTimer(timeout)
+  asyncTimer()
 }
 
 function queryData () {
-  let query_timeout = core_functionality['query-timeout']
   GameDig.query(game_settings).then((state) => {
     if (state.ping > server_config[game_name]['PingCheckThreshold']) {
       type = 'ping'
       api_data = `${state.ping}`
       discord_data = `${server_config[game_name]['degraded']}${state.ping} ping`
-      updateStats(query_timeout)
+      updateStats()
     } else {
       type = 'data'
       api_data = `${state.players.length}\/${state.maxplayers}`
       discord_data = `${server_config[game_name]['online']}${state.players.length}\/${state.maxplayers}`
-      updateStats(query_timeout)
+      updateStats()
     }
   }).catch((exception) => {
     type = 'status'
@@ -68,17 +67,17 @@ function queryData () {
     for (let offlinebase = 0; offlinebase < offline_log_limit; offlinebase++) {
       logger.log('error', exception)
     }
-    updateStats(core_functionality['maintenance-timeout'])
+    updateStats()
   })
 }
 
-function asyncTimer (timeout) {
-  setTimeout(async () => {
+function asyncTimer () {
+  setTimeout(() => {
     queryData()
-  }, parseInt(timeout || 5000, 10))
+  }, query_timeout)
 }
 
-function gather_data() {
+function gatherData () {
   let return_data = {
     name:game_name,
     data:api_data,
@@ -87,4 +86,4 @@ function gather_data() {
   return return_data
 }
 
-module.exports = { login, gather_data }
+module.exports = { gatherData }
