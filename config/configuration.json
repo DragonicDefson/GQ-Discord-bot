@@ -2,12 +2,14 @@
   "application": {
     "name": "GQ-Discord-bot",
     "author": "Bradley Methorst <contact@bradleymethorst.com>",
-    "version": "0.0.4",
+    "version": "0.0.6",
     "license": "GPL-v3.0",
     "core-functionality": {
+      "server-names": ["minecraft", "valheim", "ark-survival-evolved", "space-engineers", "conan-exiles", "seven-days-to-die"],
       "network-name": "",
       "socketTimeout": 2000,
       "attemptTimeout": 10000,
+      "queryTimeout": 1000,
       "offline-log-limit": 1
     },
     "sub-modules": {
