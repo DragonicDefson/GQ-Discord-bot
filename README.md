@@ -37,5 +37,11 @@ services:
     restart: unless-stopped
 ```
 
+Then perform an: ```docker compose up -d```
+Or when you desire to have debugging under certain circumstances:
+```
+docker compose up (notice the lack of the -d argument)
+```
+
 # Update (as of 11/26/2022)
 - Includes an API for web interfaces now as well!
