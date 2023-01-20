@@ -2,7 +2,7 @@
   "application": {
     "name": "GQ-Discord-bot",
     "author": "Bradley Methorst <contact@bradleymethorst.com>",
-    "version": "0.0.6",
+    "version": "0.0.7",
     "license": "GPL-v3.0",
     "core-functionality": {
       "server-names": ["minecraft", "valheim", "ark-survival-evolved", "space-engineers", "conan-exiles", "seven-days-to-die"],
@@ -14,13 +14,21 @@
     },
     "sub-modules": {
       "logging": {
-        "winston": {
-          "__comment": "If you disable this config option, it's suggested to turn on console logging.",
-          "enabled": true,
-          "log-path": "./logs/"
-        },
-        "console": {
-          "enabled": true
+        "transports": {
+          "winston": {
+            "type": "file",
+            "enabled": false,
+            "path": "./logs/"
+          },
+          "console": {
+            "type": "console",
+            "enabled": true
+          },
+          "docker-compose": {
+            "type": "file",
+            "enabled": false,
+            "path": "./docker-compose/"
+          }
         }
       },
       "api": {

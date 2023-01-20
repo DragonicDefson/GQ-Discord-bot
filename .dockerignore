@@ -2,3 +2,5 @@ node_modules
 npm-debug.log
 web
 logs/*.*
+docker-compose.yml
+docker-compose/*.*

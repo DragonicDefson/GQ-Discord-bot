@@ -1,6 +1,6 @@
 {
   "name": "gq-discord-bot",
-  "version": "0.0.5",
+  "version": "0.0.7",
   "description": "Discord bot for querying game servers.",
   "main": "app.js",
   "repository": {

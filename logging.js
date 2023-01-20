@@ -1,38 +1,70 @@
 const winston = require('winston')
+const format = winston.format
+const { File, Console } = require('winston/lib/winston/transports')
 const os = require('os')
-const path = require('path')
 const config = require('./config')
-const logging_config = config.load('sub-modules')['logging']['winston']
-const file_name = path.basename(`${__dirname}/${__filename}`)
+const transports = config.load('sub-modules')['logging']['transports']
 const application_name = config.load('name')
-let log_date = undefined
+
+function path_check(path) {
+  switch (os.platform()) {
+    case 'win32':
+      if (!path.endsWith('/')) {
+        path = transport_path.replace(`${transport_path}`, `${transport_path}/`)
+      }
+    break
+    default:
+      path = transport_path.replace(`${transport_path}`, `${transport_path}\\`)
+    break
+  }
+  return path
+}
+
+function logger_options_builder(level, message) {
+  let transport_return = {
+    level: level,
+    message: return_unique_level_based_msg(level, message),
+    exitOnError: false,
+    defaultMeta: { service: `${application_name.toLowerCase()}-service` },
+    transports: []
+  }
+  let transport_values = Object.values(transports)
+  for (let increment = 0; increment < transport_values.length; increment++) {
+    if (transport_values[increment]['enabled']) {
+      if (transport_values[increment]['type'] === 'console') {
+        transport_return.transports.push(new Console({ format: format.combine(format.printf(level => `[${level.level}]: ${level.message}`), format.cli(), format.colorize({ all: false }))}))
+      } else {
+        transport_return.transports.push(new File({ format: format.combine(format.json(), format.prettyPrint()),
+            filename: `${path_check(transport_values[increment]['path'])}${application_name.toLowerCase()}.${level}.log`, level: level
+        }))
+      }
+    }
+  }
+  return transport_return
+}
 
 function log(level, message) {
-  log_date = create_log_date_zero_addition()
-  let log_path = logging_config['log-path']
-  if (os.platform() === 'win32' || !log_path.endsWith('/') || !log_path.endsWith('\\')) {
-    log_path.replace(`${log_path}`, `${log_path}/`)
-  }
-  let winston_logger = winston.createLogger({
-    exitOnError: false,
-    level: level,
-    format: winston.format.json(),
-    defaultMeta: { service: 'infrastructure-dependent-service' },
-    transports: [
-      new winston.transports.File({ filename: `${log_path}${level}.log`, level: level }),
-    ]
-  })
-  switch (typeof winston_logger) {
+  let logger_options = logger_options_builder(level, message)
+  let winston_logger = winston.createLogger(logger_options)
+  switch (logger_options.transports[0]) {
     case undefined:
-      console.log(`[exception]:[${log_date}] ${application_name} throwed an exception in: ${file_name}, winston: ${winston_logger}`)
-      if (!logging_config['console']['console']) {
-        console.log(`[info]:[${log_date}] It is suggested to enable console logging in the configuration as the logger function has failed.`)
+      if (!transports['console']['enabled']) {
+        let log_object = {
+          messages: {
+            exception: {
+              message: return_unique_level_based_msg('exception', `throwed an exception, Winston Options: ${logger_options.transports[0]}`)
+            },
+            info: {
+              message: return_unique_level_based_msg('info', 'It is suggested to enable console logging in the configuration as the logger function has failed')
+            }
+          }
+        }
+        console.log(log_object.messages)
       } else { return }
-    break;
+    break
     default:
-      let unique_message = return_unique_level_based_msg(level, message, log_path)
-      config_based_console_logging(level, unique_message, winston_logger, log_date)
-    break;
+      winston_logger.log(level, return_unique_level_based_msg(level, message))
+    break
   }
 }
 
@@ -57,23 +89,8 @@ function create_log_date_zero_addition() {
   return log_message.replace(':', '')
 }
 
-function return_unique_level_based_msg(level, message, log_path) {
-  let new_message = undefined
-  if (level == 'info') {
-    new_message = `[${level}]:[${log_date}] ${application_name} message logged in ${log_path}${level}.log: ${message}`
-  } else {
-    new_message = `[${level}]:[${log_date}] ${application_name} throwed an ${level} in: ${log_path}${level}.log: ${message}`
-  }
-  return new_message
-}
-
-function config_based_console_logging(level, message, logger) {
-  if (logging_config['enabled']) {
-    logger.log(level, message)
-    console.log(message)
-  } else if (logging_config['enabled']) {
-    console.log(return_unique_level_based_msg())
-  }
+function return_unique_level_based_msg(level, message) {
+  return `[${level.toUpperCase()}]:[${application_name}]:[${create_log_date_zero_addition()}]: ${message}`
 }
 
 module.exports = { log }

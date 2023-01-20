@@ -5,7 +5,6 @@ const config = require('../config')
 const core_functionality = config.load('core-functionality')
 const server_config = config.load('server-definitions')
 const game_name = 'ark-survival-evolved'
-const application_name = config.load('name')
 const network_name = core_functionality['network-name']
 const attempts = server_config[game_name]['maxAttempts']
 const query_timeout = core_functionality['queryTimeout']
@@ -33,7 +32,7 @@ global.ark_survival_evolved_login = function login (auth_token) {
     client = new Client({intents: [IntentsBitField.Flags.Guilds]})
     client.login(auth_token)
     client.on('ready', () => {
-      logger.log('info', `${application_name} has succeeded Discord authorization process and is running.`)
+      logger.log('info', `[${game_name}]: Succeeded Discord authorization process and is running.`)
       asyncTimer()
     })
   }
