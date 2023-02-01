@@ -5,9 +5,21 @@ updates:
     schedule:
       interval: "weekly"
       time: "05:00"
+      timezone: "Europe/Amsterdam"
+    reviewers:
+      - "DragonicDefson"
+    labels:
+      - "NPM depends"
+      - "Security"
       
   - package-ecosystem: "docker"
     directory: "/"
     schedule:
       interval: "weekly"
       time: "05:00"
+      timezone: "Europe/Amsterdam"
+    reviewers:
+      - "DragonicDefson"
+    labels:
+      - "Docker depends"
+      - "Security"
