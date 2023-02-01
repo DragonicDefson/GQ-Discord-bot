@@ -1,13 +1,13 @@
 version: 2
 updates:
   - package-ecosystem: "npm"
-    has:patch
+    has: "patch"
     directory: "/"
     schedule:
       interval: "weekly"
       
   - package-ecosystem: "docker"
-    has:patch
+    has: "patch"
     directory: "/"
     schedule:
       interval: "weekly"
