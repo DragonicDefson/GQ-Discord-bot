@@ -10,7 +10,7 @@ An Discord bot for querying game servers
 - 7 Days to die
 
 # How to install
-- Install Node.JS (written and tested on Node.JS v16), (Update 0.0.5 uses Node.js v18 but v16 should still work fine.).
+- Install Node.JS v18 (v16 should work fine as well).
 - Create a bot for every game server on: https://discord.com/developers/
 - Add the generated tokens to the configuration.json configuration file inside the config directory.
 - Change the IP's and ports suited per your situation in: ./config/configuration.json.
