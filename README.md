@@ -16,7 +16,7 @@ An Discord bot for querying game servers
 - Create a bot for every game server on: https://discord.com/developers/
 - Add the generated tokens to the configuration.json configuration file inside the config directory.
 - Change the IP's and ports suited per your situation in: ./config/configuration.json.
-- Start the bot by running: `npm start`.
+- Start the bot by running: `npm start`
 
 # Additional information
 - If you run an Ark Survival Evolved dedicated server on the same machine as a Conan Exiles server, make sure to change it's port in the Engine.ini file of the Conan Exiles server, and the port in the ./config/configuration.json of the bot. To prevent inteference between the servers.
