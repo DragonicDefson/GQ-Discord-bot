@@ -8,4 +8,5 @@ services:
       - "0.0.0.0:8484:8484/tcp"
     volumes:
       - /var/log/gq-discord-bot/:/usr/src/app/docker-compose/
+      - /var/www/vhosts/merciantnetwork.com/httpdocs/api/config/global/:/usr/src/app/config/global/
     restart: unless-stopped

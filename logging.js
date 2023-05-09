@@ -1,96 +1,107 @@
 const winston = require('winston')
-const format = winston.format
-const { File, Console } = require('winston/lib/winston/transports')
-const os = require('os')
-const config = require('./config')
-const transports = config.load('sub-modules')['logging']['transports']
-const application_name = config.load('name')
+const config = require("./config").load()
+const application_name = config["name"]
+const transports = config["sub-modules"]["logging"]["transports"]
+const chalk = require('chalk')
+const path = require('path')
 
-function path_check(path) {
-  switch (os.platform()) {
-    case 'win32':
-      if (!path.endsWith('/')) {
-        path = transport_path.replace(`${transport_path}`, `${transport_path}/`)
-      }
-    break
-    default:
-      path = transport_path.replace(`${transport_path}`, `${transport_path}\\`)
-    break
-  }
-  return path
+const date_settings = {
+  path: true, log: false
 }
 
-function logger_options_builder(level, message) {
-  let transport_return = {
-    level: level,
-    message: return_unique_level_based_msg(level, message),
+function options(level, message) {
+  let transport, file_path = undefined
+  let format = winston.format
+  let data = {
+    defaultMeta: { service: `${application_name}` },
     exitOnError: false,
-    defaultMeta: { service: `${application_name.toLowerCase()}-service` },
     transports: []
   }
-  let transport_values = Object.values(transports)
-  for (let increment = 0; increment < transport_values.length; increment++) {
-    if (transport_values[increment]['enabled']) {
-      if (transport_values[increment]['type'] === 'console') {
-        transport_return.transports.push(new Console({ format: format.combine(format.printf(level => `[${level.level}]: ${level.message}`), format.cli(), format.colorize({ all: false }))}))
-      } else {
-        transport_return.transports.push(new File({ format: format.combine(format.json(), format.prettyPrint()),
-            filename: `${path_check(transport_values[increment]['path'])}${application_name.toLowerCase()}.${level}.log`, level: level
-        }))
+  let values = Object.values(transports);
+  for (let increment = 0; increment < values.length; increment++) {
+    if (values[increment]['enabled']) {
+      let transport_type = values[increment]['type']
+      switch(transport_type) {
+        case "console":
+          transport = new winston.transports.Console({
+            format: format.combine(
+              format.colorize(),
+              format.printf(() => msg(application_name, level, message))
+            )
+          })
+        break
+        case "file":
+          let date = date_handler(date_settings.path)
+          switch (values[increment]['rotation']) {
+            case true: file_path = `${__dirname}\\${values[increment]['path']}\\${application_name}${date}.${level}.log`; break
+            default: file_path = `${__dirname}\\${values[increment]['path']}\\${application_name}.${level}.log`; break
+          }
+          transport = new winston.transports.File({
+            format: format.combine(
+              format.json(), format.prettyPrint()
+            ),
+            filename: path.resolve(file_path)
+          })
+        break
       }
+      data.transports.push(transport)
     }
   }
-  return transport_return
+  return data
 }
 
 function log(level, message) {
-  let logger_options = logger_options_builder(level, message)
+  let logger_options = options(level, message)
   let winston_logger = winston.createLogger(logger_options)
-  switch (logger_options.transports[0]) {
+  let transports = logger_options.transports[0]
+  switch (transports) {
     case undefined:
-      if (!transports['console']['enabled']) {
-        let log_object = {
-          messages: {
-            exception: {
-              message: return_unique_level_based_msg('exception', `throwed an exception, Winston Options: ${logger_options.transports[0]}`)
-            },
-            info: {
-              message: return_unique_level_based_msg('info', 'It is suggested to enable console logging in the configuration as the logger function has failed')
+      switch (transports['console']['enabled']) {
+        case false:
+          let object = {
+            messages: {
+              exception: { message: msg('exception', `throwed an exception, Winston Options: ${transports}`) },
+              info: { message: msg('info', "It's suggested to enable console logging in the configuration as the logger function has failed") }
             }
           }
-        }
-        console.log(log_object.messages)
-      } else { return }
+          console.log(object.messages)
+        break
+        default: return
+      }
     break
+    default: winston_logger.log(level, message); break
+  }
+}
+
+function date_handler(settings) {
+  let date = new Date(); let data = undefined; let message = ""
+  switch (settings) {
+    case true: data = [ date.getFullYear(), date.getMonth(), date.getDay() ]; break
     default:
-      winston_logger.log(level, return_unique_level_based_msg(level, message))
+      data = [
+        date.getFullYear(),
+        date.getMonth(),
+        date.getDay(),
+        date.getHours(),
+        date.getMinutes()
+      ]
     break
   }
-}
-
-function create_log_date_zero_addition() {
-  const date = new Date()
-  let log_message = ""
-  let date_array = [
-    date.getFullYear(),
-    date.getMonth(),
-    date.getDay(),
-    date.getHours(),
-    date.getMinutes(),
-    date.getSeconds()
-  ]
-  const array_itterator = date_array.values()
-  for (let incr = 0; incr < date_array.length; incr++) {
-    let value = array_itterator.next().value
-    if (value > 0 && value < 10) {
-      log_message += `:0${value}`
-    } else { log_message += `:${value}` }
+  let itterator = data.values()
+  for (let increment = 0; increment < data.length; increment++) {
+    let value = itterator.next().value
+    if (value > 0 && value < 10) { message += `.0${value}` } else { message += `.${value}` }
   }
-  return log_message.replace(':', '')
+  return message.replace(':', '')
 }
 
-function return_unique_level_based_msg(level, message) {
-  return `[${level.toUpperCase()}]:[${application_name}]:[${create_log_date_zero_addition()}]: ${message}`
+function msg(service_name, level, message) {
+  date = date_handler(date_settings.log)
+  switch(level) {
+    case "info": return `[${chalk.green(date)}] [${chalk.green(level)}] [${chalk.green(service_name)}] ${chalk.green(message)}`;
+    case "warning": return `[${chalk.yellow(date)}] [${chalk.yellow(level)}] [${chalk.yellow(service_name)}] ${chalk.yellow(message)}`;
+    case "error": return `[${chalk.red(date)}] [${chalk.red(level)}] [${chalk.red(service_name)}] ${chalk.red(message)}`;
+  }
 }
 
 module.exports = { log }

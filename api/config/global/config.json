@@ -1,0 +1,1 @@
+{"name":"gq-discord-bot","author":"Bradley Methorst <contact@bradleymethorst.com>","license":"GPL-3.0","version":"0.0.8","sub-modules":{"api":{"enabled":true,"ip":"0.0.0.0","port":"8484","web-root":"/api/config/global","encryption":true}}}

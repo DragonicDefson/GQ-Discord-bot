@@ -1,4 +1,5 @@
 node_modules
 npm-debug.log
-logs/*.*
-docker-compose/*.*
+logs
+docker-compose
+api/config/app

@@ -1,0 +1,193 @@
+{
+  "application": {
+    "name": "gq-discord-bot",
+    "author": "Bradley Methorst <contact@bradleymethorst.com>",
+    "license": "GPL-3.0",
+    "core-functionality": {
+      "server-names": ["ark-survival-evolved", "conan-exiles", "minecraft", "seven-days-to-die", "space-engineers", "valheim"],
+      "network-name": "",
+      "socket-timeout": 2000,
+      "attempt-timeout": 10000,
+      "query-timeout": 1000,
+      "offline-log-limit": 1,
+      "charset": "UTF8MB4",
+      "collation": "UTF8MB4_UNICODE_CI"
+    },
+    "sub-modules": {
+      "logging": {
+        "transports": {
+          "winston": {
+            "type": "file",
+            "enabled": true,
+            "rotation": true,
+            "path": "logs"
+          },
+          "console": {
+            "type": "console",
+            "enabled": true,
+            "colorizer": {
+              "info": ["", "", ""],
+              "warning": ["", "", ""],
+              "error": ["", "", ""]
+            }
+          },
+          "docker-compose": {
+            "type": "file",
+            "enabled": false,
+            "rotation": true,
+            "path": "logs/docker-compose"
+          }
+        }
+      },
+      "database": {
+        "host": "localhost",
+        "username": "root",
+        "password": "root",
+        "connection-limit": 5,
+        "connection-timeout": 10000,
+        "compress": true,
+        "check-numbers": true,
+        "ssl-encrypt": false
+      },
+      "security": {
+        "encryption": {
+          "enabled": true,
+          "type": "AES-256-CTR",
+          "private-key": "rUS1l+8BPwwhOoGGfOcpKi6lm1nChA8h",
+          "iv-length": 16,
+          "trng": {
+            "enabled": false,
+            "__api-key-provider-reff": "https://api.random.org/dashboard",
+            "api-key": "",
+            "number": 1,
+            "length": 16,
+            "replacement": true,
+            "characters": "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+          }
+        }
+      }
+    },
+    "server-definitions": {
+      "minecraft": {
+        "enabled": true,
+        "stats-prefix": "",
+        "stats-type": "watching",
+        "discord-key": "",
+        "type": "minecraft",
+        "port": 25565,
+        "ping-check-threshold": 50,
+        "socket-timeout": 2000,
+        "attempt-timeout": 10000,
+        "max-attempts": null,
+        "given-port-only": true,
+        "debug": false,
+        "request-rules": false,
+        "host": "",
+        "online": "♦ Players online: ",
+        "offline": "♦ Servers: offline.",
+        "degraded": "♦ Network degraded: ",
+        "multi-node": true
+      },
+      "valheim": {
+        "enabled": true,
+        "stats-prefix": "",
+        "stats-type": "watching",
+        "discord-key": "",
+        "type": "valheim",
+        "port": 2458,
+        "ping-check-threshold": 50,
+        "socket-timeout": 2000,
+        "attempt-timeout": 10000,
+        "max-attempts": null,
+        "given-port-only": true,
+        "debug": false,
+        "request-rules": false,
+        "host": "",
+        "online": "♦ Players online: ",
+        "offline": "♦ Server: offline",
+        "degraded": "♦ Network degraded: ",
+        "multi-node": false
+      },
+      "ark-survival-evolved": {
+        "enabled": true,
+        "stats-prefix": "",
+        "stats-type": "watching",
+        "discord-key": "",
+        "type": "arkse",
+        "port": 27015,
+        "ping-check-threshold": 50,
+        "socket-timeout": 2000,
+        "attempt-timeout": 10000,
+        "max-attempts": null,
+        "given-port-only": true,
+        "debug": false,
+        "request-rules": false,
+        "host": "",
+        "online": "♦ Players online: ",
+        "offline": "♦ Server: offline",
+        "degraded": "♦ Network degraded: ",
+        "multi-node": false
+      },
+      "space-engineers": {
+        "enabled": true,
+        "stats-prefix": "",
+        "stats-type": "watching",
+        "discord-key": "",
+        "type": "spaceengineers",
+        "port": 27016,
+        "ping-check-threshold": 50,
+        "socket-timeout": 2000,
+        "attempt-timeout": 10000,
+        "max-attempts": null,
+        "given-port-only": true,
+        "debug": false,
+        "request-rules": false,
+        "host": "",
+        "online": "♦ Players online: ",
+        "offline": "♦ Server: offline",
+        "degraded": "♦ Network degraded: ",
+        "multi-node": false
+      },
+      "conan-exiles": {
+        "enabled": true,
+        "stats-prefix": "",
+        "stats-type": "watching",
+        "discord-key": "",
+        "type": "conanexiles",
+        "port": 27018,
+        "ping-check-threshold": 50,
+        "socket-timeout": 2000,
+        "attempt-timeout": 10000,
+        "max-attempts": null,
+        "given-port-only": true,
+        "debug": false,
+        "request-rules": false,
+        "host": "",
+        "online": "♦ Players online: ",
+        "offline": "♦ Server: offline",
+        "degraded": "♦ Network degraded: ",
+        "multi-node": false
+      },
+      "seven-days-to-die": {
+        "enabled": true,
+        "stats-prefix": "",
+        "discord-key": "",
+        "stats-type": "watching",
+        "type": "7d2d",
+        "port": 26900,
+        "ping-check-threshold": 50,
+        "socket-timeout": 2000,
+        "attempt-timeout": 10000,
+        "max-attempts": null,
+        "given-port-only": true,
+        "debug": false,
+        "request-rules": false,
+        "host": "",
+        "online": "♦ Players online: ",
+        "offline": "♦ Server: offline",
+        "degraded": "♦ Network degraded: ",
+        "multi-node": false
+      }
+    }
+  }
+}

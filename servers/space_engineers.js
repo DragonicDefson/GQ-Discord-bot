@@ -1,73 +1,86 @@
-const GameDig = require('gamedig')
-const { Client, IntentsBitField } = require('discord.js')
-const logger = require('../logging')
-const config = require('../config')
-const core_functionality = config.load('core-functionality')
-const server_config = config.load('server-definitions')
-const game_name = 'space-engineers'
-const network_name = core_functionality['network-name']
-const attempts = server_config[game_name]['maxAttempts']
-const query_timeout = core_functionality['queryTimeout']
-let client, discord_data, api_data, type, offline_log_limit, max_attemps = undefined
+const game_name = "space-engineers"
+let client, discord_data, api_data, type, offline_log_limit, ping, client_state, handler_state = undefined
 
-if (typeof attempts !== null) {
-  max_attemps = attempts
-} else { max_attemps = 0 }
+const GameDig = require("gamedig").query
+const { Client, IntentsBitField } = require("discord.js")
+const config = require("../config").load()
+const logger = require("../logging")
+
+const core = config["core-functionality"]
+const network_name = core["network-name"]
+const query_timeout = core["query-timeout"]
+
+const server_config = config["server-definitions"][game_name]
+let max_attempts = server_config["max-attempts"]
+
+if (typeof max_attempts == null) { max_attempts = 0 }
 
 const game_settings = {
-  port: server_config[game_name]['port'],
-  socketTimeout: server_config[game_name]['socketTimeout'],
-  attemptTimeout: server_config[game_name]['attemptTimeout'],
-  maxAttempts: max_attemps,
-  givenPortOnly: server_config[game_name]['givenPortOnly'],
-  type: server_config[game_name]['type'],
-  host: server_config[game_name]['host'],
-  debug: server_config[game_name]['debug'],
-  requestRules: server_config[game_name]['request-rules']
+  port: server_config['port'],
+  socketTimeout: server_config['socket-timeout'],
+  attemptTimeout: server_config['attempt-timeout'],
+  maxAttempts: max_attempts,
+  givenPortOnly: server_config['given-port-only'],
+  type: server_config['type'],
+  host: server_config['host'],
+  debug: server_config['debug'],
+  requestRules: server_config['request-rules']
 }
 
 global.space_engineers_login = function login (auth_token) {
-  offline_log_limit = core_functionality['offline-log-limit']
-  if (server_config[game_name]['enabled']) {
+  offline_log_limit = core['offline-log-limit']
+  if (server_config['enabled']) {
     client = new Client({intents: [IntentsBitField.Flags.Guilds]})
-    client.login(auth_token)
-    client.on('ready', () => {
-      logger.log('info', `[${game_name}]: Succeeded Discord authorization process and is running.`)
-      asyncTimer()
-    })
+    client.login(auth_token).catch(() => { client_state = false; logger.log('info', `[${game_name}]: Failed Discord authorization process.`)})
+    client.on('ready', () => { client_state = true; logger.log('info', `[${game_name}]: Succeeded Discord authorization process and is running.`) })
+    asyncTimer()
   }
 }
 
 function updateStats () {
-  client.user.setActivity(Buffer.from(`${network_name} ${server_config[game_name]['stats-prefix']} ${discord_data}`, 'utf-8').toString(), [{
-    status: 'online',
-    type: server_config[game_name]['stats-type']
-  }])
+  if (client_state) {
+    client.user.setActivity(Buffer.from(`${network_name} ${server_config[game_name]['stats-prefix']} ${discord_data}`, 'utf-8').toString(), [{
+      status: 'online',
+      type: server_config[game_name]['stats-type']
+    }])
+  }
   asyncTimer()
 }
 
 function queryData () {
-  GameDig.query(game_settings).then((state) => {
-    if (state.ping > server_config[game_name]['PingCheckThreshold']) {
+  GameDig(game_settings).then((state) => {
+    ping = state.ping
+    if (state.ping > server_config['ping-check-threshold']) {
       type = 'ping'
       api_data = `${state.ping}`
-      discord_data = `${server_config[game_name]['degraded']}${state.ping} ping`
-      updateStats()
+      discord_data = `${server_config['degraded']}${state.ping} ping`
+      updateStats(); handler_state = true
     } else {
       type = 'data'
       api_data = `${state.players.length}\/${state.maxplayers}`
-      discord_data = `${server_config[game_name]['online']}${state.players.length}\/${state.maxplayers}`
-      updateStats()
+      discord_data = `${server_config['online']}${state.players.length}\/${state.maxplayers}`
+      updateStats(); handler_state = true
     }
   }).catch((exception) => {
     type = 'status'
-    api_data = 'Server: offline'
-    discord_data = server_config[game_name]['offline']
     for (let offlinebase = 0; offlinebase < offline_log_limit; offlinebase++) {
       logger.log('error', exception)
     }
-    updateStats()
+    if (!server_config["multi-node"]) {
+      discord_data = server_config['offline']
+      api_data = 'Server is offline'
+      updateStats(); handler_state = false
+    } else {
+      discord_data = server_config['offline']
+      api_data = 'Servers are offline'
+      updateStats(); handler_state = false
+    }
   })
+}
+
+function time() {
+  const time = new Date().getTime() - ping
+  return time.toLocaleString().toString()
 }
 
 function asyncTimer () {
@@ -77,12 +90,14 @@ function asyncTimer () {
 }
 
 function gatherData () {
-  let return_data = {
-    name:game_name,
-    data:api_data,
-    type:type
+  return {
+    ping: ping,
+    name: game_name,
+    data: api_data,
+    type: type,
+    state: handler_state,
+    timestamp: time()
   }
-  return return_data
 }
 
 module.exports = { gatherData }
