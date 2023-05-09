@@ -6,6 +6,8 @@ updates:
       interval: "weekly"
       time: "05:00"
       timezone: "Europe/Amsterdam"
+    ignore:
+      - dependency-name: "chalk"
     reviewers:
       - "DragonicDefson"
     labels:
