@@ -39,16 +39,6 @@
           }
         }
       },
-      "database": {
-        "host": "localhost",
-        "username": "root",
-        "password": "root",
-        "connection-limit": 5,
-        "connection-timeout": 10000,
-        "compress": true,
-        "check-numbers": true,
-        "ssl-encrypt": false
-      },
       "security": {
         "encryption": {
           "enabled": true,
