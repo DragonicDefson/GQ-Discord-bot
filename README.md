@@ -11,13 +11,17 @@ An Discord bot for querying game servers
 
 # How to install
 - Install Node.JS v18 (v16 should work fine as well).
+- Clone the bot's repository: `git clone https://github.com/DragonicDefson/GQ-Discord-bot.git`
+- Run NPM update inside the repo directory: `npm update`
 - Create a bot for every game server on: https://discord.com/developers/
 - Add the generated tokens to the configuration.json configuration file inside the config directory.
 - Change the IP's and ports suited per your situation in: ./config/configuration.json.
+- Start the bot by running: `npm start`.
 
 # Additional information
 - If you run an Ark Survival Evolved dedicated server on the same machine as a Conan Exiles server, make sure to change it's port in the Engine.ini file of the Conan Exiles server, and the port in the ./config/configuration.json of the bot. To prevent inteference between the servers.
 - Enjoy :)
+- If you want it to automatically start after a server reboot it's recommended to go for a Dockerized approach.
 
 # How to build with Docker?
 - It just requires a single command: `docker build . -t dragonicdefson/gq-discord-bot`
