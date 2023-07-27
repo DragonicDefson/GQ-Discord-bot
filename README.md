@@ -1,3 +1,5 @@
+![dependabot](https://img.shields.io/static/v1?label=dependabot&message=active&color=%230098CB&style=for-the-badge)&nbsp;&nbsp;&nbsp;&nbsp;[![docker-hub](https://img.shields.io/static/v1?label=docker&message=hub&color=%230098CB&style=for-the-badge)](https://hub.docker.com/layers/dragonicdefson/gq-discord-bot/latest/images/sha256-a24adb691035c7e75cd1c42065b98bf1baa11fb3b74350903cb8865a688f38e0?context=explore)
+
 # GQ-Discord-bot
 An Discord bot for querying game servers
 
