@@ -43,3 +43,6 @@ services:
 
 # Update (as of 11/26/2022)
 - Includes an API for web interfaces now as well!
+
+# Update (as of 07/27/2023)
+- Docker image available.
