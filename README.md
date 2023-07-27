@@ -26,7 +26,8 @@ An Discord bot for querying game servers
 - If you want it to automatically start after a server reboot it's recommended to go for a Dockerized approach.
 
 # How to build with Docker?
-- It just requires a single command: `docker build . -t dragonicdefson/gq-discord-bot`
+- It just requires a single command:
+- `docker pull dragonicdefson/gq-discord-bot:latest && docker compose up -d`
 
 # How to deploy with Docker compose?
 - If you've already pulled the image from Docker Hub, create a docker-compose.yml file on the system you want to deploy the bot with the below code:
